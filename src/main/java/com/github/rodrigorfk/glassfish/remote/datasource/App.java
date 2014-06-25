@@ -25,16 +25,16 @@ public class App {
             return ;
         }
         
-        JNDIConnector connector = new JNDIConnector();
-        
         Map<String,String> params = new HashMap<>();
         params.put("java.naming.factory.initial", Constants.JAVA_NAMING_FACTORY_INITIAL);
         params.put("org.omg.CORBA.ORBInitialHost", Constants.ORG_OMG_CORBA_ORBINITIALHOST);
         params.put("org.omg.CORBA.ORBInitialPort", Constants.ORG_OMG_CORBA_ORBINITIALPORT);
         
+        JNDIConnector connector = new JNDIConnector(params);
+        
         String sql = "select 1 from dual";
         String jndi = args[0];
-        DataSource dataSource = connector.lookupDataSource(jndi, params);
+        DataSource dataSource = connector.lookupDataSource(jndi);
         
         try (Connection con = dataSource.getConnection()) {
             try(Statement stmt = con.createStatement()){
@@ -44,6 +44,8 @@ public class App {
                     }
                 }
             }
+        }finally{
+            connector.close();
         }
     }
 }

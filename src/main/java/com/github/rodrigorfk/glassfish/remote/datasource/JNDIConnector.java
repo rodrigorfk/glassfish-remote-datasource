@@ -17,11 +17,20 @@ import javax.sql.DataSource;
  * @author rodrigokuntzer
  */
 public class JNDIConnector {
+
+    private final InitialContext ic;
     
-    public DataSource lookupDataSource(String jndi, Map<String,String> params) throws NamingException{
-        InitialContext ic = new InitialContext(new Hashtable<>(params));
+    public JNDIConnector(Map<String,String> params) throws NamingException {
+        ic = new InitialContext(new Hashtable<>(params));
+    }
+    
+    public DataSource lookupDataSource(String jndi) throws NamingException{
         System.out.println("will lookup JNDI with the following parameters "+ic.getEnvironment());
         return (DataSource) ic.lookup(jndi);
+    }
+
+    public void close() throws NamingException {
+        ic.close();
     }
     
 }
