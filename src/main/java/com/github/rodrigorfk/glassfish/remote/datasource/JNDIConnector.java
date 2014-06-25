@@ -20,6 +20,7 @@ public class JNDIConnector {
     
     public DataSource lookupDataSource(String jndi, Map<String,String> params) throws NamingException{
         InitialContext ic = new InitialContext(new Hashtable<>(params));
+        System.out.println("will lookup JNDI with the following parameters "+ic.getEnvironment());
         return (DataSource) ic.lookup(jndi);
     }
     
